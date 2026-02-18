@@ -108,52 +108,79 @@ function App() {
     XLSX.writeFile(wb, 'Approval_Lists.xlsx');
   };
 
-  const DataSection = ({ title, count, icon: Icon, color, data }) => (
-    <div className={`data-section ${color}`}>
-      <div className="section-header">
-        <div className="section-title">
-          <Icon size={28} />
-          <h2>{title}</h2>
-          <span className="count-badge">{count}</span>
+  const DataSection = ({ title, count, icon: Icon, color, data }) => {
+    const [plazaFilter, setPlazaFilter] = useState('');
+    
+    const filteredData = plazaFilter 
+      ? data.filter(row => row.Plaza && row.Plaza.toLowerCase().includes(plazaFilter.toLowerCase()))
+      : data;
+
+    const uniquePlazas = [...new Set(data.map(row => row.Plaza).filter(Boolean))].sort();
+
+    return (
+      <div className={`data-section ${color}`}>
+        <div className="section-header">
+          <div className="section-title">
+            <Icon size={28} />
+            <h2>{title}</h2>
+            <span className="count-badge">{filteredData.length}</span>
+          </div>
+          {data.length > 0 && (
+            <div className="filter-container">
+              <select 
+                value={plazaFilter} 
+                onChange={(e) => setPlazaFilter(e.target.value)}
+                className="plaza-filter"
+              >
+                <option value="">All Plazas ({count})</option>
+                {uniquePlazas.map(plaza => (
+                  <option key={plaza} value={plaza}>{plaza}</option>
+                ))}
+              </select>
+            </div>
+          )}
         </div>
-      </div>
-      {data.length > 0 && (
-        <div className="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>Plaza</th>
-                <th>Account</th>
-                <th>Category</th>
-                <th>Customer</th>
-                <th>Mobile</th>
-                <th>MRP</th>
-                <th>Down Payment</th>
-                <th>Difference</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((row, idx) => (
-                <tr key={idx}>
-                  <td>{row.Plaza}</td>
-                  <td>{row.Account}</td>
-                  <td>{row.Category}</td>
-                  <td>{row.Customer}</td>
-                  <td>{row.Mobile}</td>
-                  <td>{row.MRP.toLocaleString()}</td>
-                  <td>{row.Down.toLocaleString()}</td>
-                  <td className="difference">{row.Difference.toLocaleString()}</td>
+        {filteredData.length > 0 && (
+          <div className="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Plaza</th>
+                  <th>Account</th>
+                  <th>Category</th>
+                  <th>Customer</th>
+                  <th>Mobile</th>
+                  <th>MRP</th>
+                  <th>Down Payment</th>
+                  <th>Difference</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-      {data.length === 0 && (
-        <div className="empty-state">No records found</div>
-      )}
-    </div>
-  );
+              </thead>
+              <tbody>
+                {filteredData.map((row, idx) => (
+                  <tr key={idx}>
+                    <td>{row.Plaza}</td>
+                    <td>{row.Account}</td>
+                    <td>{row.Category}</td>
+                    <td>{row.Customer}</td>
+                    <td>{row.Mobile}</td>
+                    <td>{row.MRP.toLocaleString()}</td>
+                    <td>{row.Down.toLocaleString()}</td>
+                    <td className="difference">{row.Difference.toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+        {filteredData.length === 0 && data.length > 0 && (
+          <div className="empty-state">No records found for selected plaza</div>
+        )}
+        {data.length === 0 && (
+          <div className="empty-state">No records found</div>
+        )}
+      </div>
+    );
+  };
 
   const totalRecords = highValue.length + rcmList.length + dcmList.length + cseList.length;
 
