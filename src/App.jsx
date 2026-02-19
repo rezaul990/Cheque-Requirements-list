@@ -191,6 +191,9 @@ function App() {
           <FileSpreadsheet size={40} />
           <h1>Hire Sales Cheque Requirment and Approval Checker</h1>
           <p>Automated approval workflow management</p>
+          <div className="instruction-box">
+            <p>POS এ লগিন করে - Sales &gt; Reports &gt; Credit Recovery &gt; Hire Sales & Collection Report ডাউনলোড করে আপলোড করেন।</p>
+          </div>
         </div>
       </div>
 

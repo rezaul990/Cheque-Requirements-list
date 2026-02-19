@@ -47,6 +47,23 @@ body {
   font-weight: 400;
 }
 
+.instruction-box {
+  margin-top: 1.5rem;
+  padding: 1rem 1.5rem;
+  background: rgba(59, 130, 246, 0.15);
+  border: 2px solid rgba(59, 130, 246, 0.3);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.instruction-box p {
+  color: #e0f2fe;
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0;
+  line-height: 1.6;
+}
+
 .upload-section {
   display: flex;
   gap: 2rem;
@@ -453,6 +470,14 @@ tbody tr:last-child td {
 
   .header p {
     font-size: 0.95rem;
+  }
+
+  .instruction-box {
+    padding: 0.875rem 1.25rem;
+  }
+
+  .instruction-box p {
+    font-size: 0.9rem;
   }
 
   .upload-section {
